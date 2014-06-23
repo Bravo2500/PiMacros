@@ -1,0 +1,81 @@
+﻿VERSION BUILD=8021931
+TAB T=1
+TAB CLOSEALLOTHERS
+
+CLEAR
+''Remove This when Finsihed $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+'SET APP_SERVER https://app17web.dev1.whispir.net
+'SET USER_NAME imacros
+'SET PASS_WORD 1234
+SET !REPLAYSPEED MEDIUM 
+'Set !Replayspeed Fast
+''Remove This when Finsihed $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+SET !TIMEOUT_PAGE 120
+SET !TIMEOUT_STEP 120
+
+SET !TIMEOUT_MACRO 600
+
+SET !VAR1 EVAL("var randomNumber=Math.floor(Math.random()*1000 + 1)+'{{!NOW:nn}}'; randomNumber;")
+'SET !LOOP 2
+URL GOTO={{APP_SERVER}}
+TAG POS=1 TYPE=INPUT:TEXT FORM=NAME:web_gen_0000 ATTR=ID:id-username CONTENT={{USER_NAME}}
+SET !ENCRYPTION NO
+TAG POS=1 TYPE=INPUT:PASSWORD FORM=NAME:web_gen_0000 ATTR=ID:id-password CONTENT={{PASS_WORD}}
+TAG POS=1 TYPE=BUTTON FORM=NAME:web_gen_0000 ATTR=CLASS:searchbutton*
+
+'Enable Debug Mode and close all Workspaces
+TAG POS=1 TYPE=DIV ATTR=CLASS:whp-container-data
+URL GOTO={{APP_SERVER}}/tmpl/home.tmpl?debugModeActive=0&loadOnlyMyCompany=1
+WAIT SECONDS=3
+TAG POS=1 TYPE=H2 ATTR=TXT:My<SP>Company
+
+
+'Open the Regression Workspace Selector List
+WAIT SECONDS=2
+TAG POS=1 TYPE=H3 ATTR=TXT:Open<SP>Workspace
+'TAG POS=R1 TYPE=A ATTR=TXT:*
+TAG POS=1 TYPE=A ATTR=TXT:--<SP>Regression
+
+'Ensure there is a second workspace open
+TAG POS=2 TYPE=DIV ATTR=CLASS:whp-workspace-name
+
+'Close My Company Workspace
+TAG POS=1 TYPE=A ATTR=TXT:Close<SP>this<SP>workspace
+WAIT SECONDS=2
+
+'FAIL IF MY Company is Found
+SET !TIMEOUT_STEP 1
+TAG POS=1 TYPE=H2 ATTR=TXT:My<SP>Company CONTENT=EVENT:FAIL_IF_FOUND
+
+'Unhide all the Menu link
+SET !ERRORIGNORE YES
+TAG POS=1 TYPE=A ATTR=CLASS:moreLink
+TAG POS=1 TYPE=A ATTR=CLASS:moreLink
+TAG POS=1 TYPE=A ATTR=CLASS:moreLink
+TAG POS=1 TYPE=A ATTR=CLASS:moreLink
+TAG POS=1 TYPE=A ATTR=CLASS:moreLink
+SET !ERRORIGNORE NO
+SET !TIMEOUT_STEP 120
+
+'set error ignore to yes
+SET !TIMEOUT_STEP 2
+SET !ERRORIGNORE YES
+'Delete all scenarios not required
+TAG POS=1 TYPE=A ATTR=TXT:Scenarios
+TAG POS=1 TYPE=INPUT:CHECKBOX FORM=NAME:activityform ATTR=NAME:selectAll CONTENT=YES
+TAG POS=1 TYPE=TD FORM=NAME:activityform ATTR=TXT:QA<SP>Task<SP>Scenario
+TAG POS=R-1 TYPE=INPUT:CHECKBOX FORM=NAME:activityform ATTR=NAME:selectedSenarios CONTENT=NO
+
+ONDIALOG POS=1 BUTTON=YES
+ONDIALOG POS=2 BUTTON=YES
+TAG POS=1 TYPE=BUTTON ATTR=TXT:Delete<SP>Scenario
+
+wait seconds = 2
+SET !ERRORIGNORE NO
+SET !TIMEOUT_STEP 120
+'----------------------
+'Logout from whispir
+FRAME F=0
+TAG POS=1 TYPE=SPAN ATTR=TXT:Profile*
+TAG POS=1 TYPE=BUTTON ATTR=TXT:Logout
+wait seconds=1
