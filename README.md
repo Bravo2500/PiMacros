@@ -20,3 +20,6 @@ There is no need to install the webapp. But some specific configs are necessary 
 
 ### Database configuration
 * No needed
+
+### Contributor
+* Jason Zheng
